@@ -5,7 +5,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class Run {
 
@@ -28,31 +29,25 @@ public class Run {
             session.persist(candidate3);
             session.persist(candidate4);
 
-            Query queryAll = session.createQuery("from Candidate");
-            for (Object item : queryAll.list()) {
-                System.out.println(item);
-            }
+            Vacancy vacancy1 = Vacancy.of("Junior", "Description1");
+            Vacancy vacancy2 = Vacancy.of("Middle", "Description2");
+            Vacancy vacancy3 = Vacancy.of("Senior", "Description3");
+            session.save(vacancy1);
+            session.save(vacancy2);
+            session.save(vacancy3);
 
-            Query queryById = session.createQuery("from Candidate c where c.id = :fId");
-            queryById.setParameter("fId", 2);
-            System.out.println(queryById.uniqueResult());
+            DBVacancy db = DBVacancy.of("base1");
+            db.setVacancies(List.of(vacancy1, vacancy2, vacancy3));
+            session.save(db);
 
-            Query queryByName = session.createQuery("from Candidate c where c.name = :fName");
-            queryByName.setParameter("fName", "Егор");
-            for (Object item : queryByName.list()) {
-                System.out.println(item);
-            }
+            candidate1.setDbVacancy(db);
 
-            Query queryUpdate = session.createQuery(
-                    "update Candidate c set c.experience = :newExp, c.salary = :newSal where c.id = : fId");
-            queryUpdate.setParameter("newExp", "Опыт 1 год");
-            queryUpdate.setParameter("newSal", 1000.00);
-            queryUpdate.setParameter("fId", 1);
-            queryUpdate.executeUpdate();
-
-            session.createQuery("delete from Candidate where id = :fId")
-                    .setParameter("fId", 2)
-                    .executeUpdate();
+            session.createQuery(
+                    "select distinct c from Candidate c "
+                            + "join fetch c.dbVacancy db "
+                            + "join fetch db.vacancies v "
+                            + "where c.id = :cId", Candidate.class)
+                    .setParameter("cId", 5).uniqueResult();
 
             session.getTransaction().commit();
             session.close();

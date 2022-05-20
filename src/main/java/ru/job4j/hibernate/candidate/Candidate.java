@@ -13,6 +13,8 @@ public class Candidate {
     private String name;
     private String experience;
     private double salary;
+    @OneToOne(fetch = FetchType.LAZY)
+    private DBVacancy dbVacancy;
 
     public Candidate() {
     }
@@ -55,6 +57,14 @@ public class Candidate {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    public DBVacancy getDbVacancy() {
+        return dbVacancy;
+    }
+
+    public void setDbVacancy(DBVacancy dbVacancy) {
+        this.dbVacancy = dbVacancy;
     }
 
     @Override

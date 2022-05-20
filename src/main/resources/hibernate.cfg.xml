@@ -16,12 +16,16 @@
         <property name="hibernate.use_sql_comments">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
 
-        <mapping class="ru.job4j.hibernate.candidate.Candidate" />
         <mapping class="ru.job4j.hibernate.model.car.Mark" />
         <mapping class="ru.job4j.hibernate.model.car.Model" />
         <mapping class="ru.job4j.hibernate.model.book.Author"/>
         <mapping class="ru.job4j.hibernate.model.book.Book"/>
         <mapping class="ru.job4j.hibernate.model.carlazy.ModelL"/>
         <mapping class="ru.job4j.hibernate.model.carlazy.MarkL"/>
+
+        <mapping class="ru.job4j.hibernate.candidate.Candidate" />
+        <mapping class="ru.job4j.hibernate.candidate.DBVacancy" />
+        <mapping class="ru.job4j.hibernate.candidate.Vacancy" />
+
     </session-factory>
 </hibernate-configuration>
